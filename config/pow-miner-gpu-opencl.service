@@ -1,0 +1,13 @@
+[Unit]
+Description=pow-miner-gpu-opencl
+After=network.target
+
+[Service]
+RestartSec=5
+Restart=always
+WorkingDirectory=/hive/miners/custom/pow-miner-gpu-opencl/
+ExecStart=/hive/miners/custom/pow-miner-gpu-opencl/tonlib-opencl-cli -v 2 -C /hive/miners/custom/pow-miner-gpu-opencl/global.config.json -e 'pminer start #GIVER #WALLET 0 32 0'
+
+[Install]
+WantedBy=multi-user.target
+Alias=miner.service

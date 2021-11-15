@@ -1,0 +1,13 @@
+[Unit]
+Description=pow-miner-gpu-cuda
+After=network.target
+
+[Service]
+RestartSec=5
+Restart=always
+WorkingDirectory=/hive/miners/custom/pow-miner-gpu-cuda/
+ExecStart=/hive/miners/custom/pow-miner-gpu-cuda/tonlib-cuda-cli -v 2 -C /hive/miners/custom/pow-miner-gpu-cuda/global.config.json -e 'pminer start #GIVER #WALLET 0 32 0'
+
+[Install]
+WantedBy=multi-user.target
+Alias=miner.service

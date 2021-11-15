@@ -1,0 +1,78 @@
+name: create-release
+
+on:
+  push:
+    tags:
+    - '*'
+
+jobs:
+  create-release:
+  
+    runs-on: ubuntu-18.04	
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+
+    - name: download and extract latest miner-tools release
+      run: |
+        PMG_OPENCL_URL="$( jq -r ".pow_miner_gpu_opencl_url" ./config/update.config.json )"
+        PMG_CUDA_URL="$( jq -r ".pow_miner_gpu_cuda_url" ./config/update.config.json )"
+        wget -O minertools-opencl-ubuntu-18.04-x86-64.tar.gz $PMG_OPENCL_URL
+        wget -O minertools-cuda-ubuntu-18.04-x86-64.tar.gz $PMG_CUDA_URL
+        tar -xf minertools-opencl-ubuntu-18.04-x86-64.tar.gz -C ./assets/
+        tar -xf minertools-cuda-ubuntu-18.04-x86-64.tar.gz -C ./assets/
+        rm -f minertools-opencl-ubuntu-18.04-x86-64.tar.gz
+        rm -f minertools-cuda-ubuntu-18.04-x86-64.tar.gz
+              
+    - name: download latest blockchain config
+      run: |
+        BLOCK_CHAIN_GC_URL="$( jq -r ".block_chain_global_config_url" ./config/update.config.json )"
+        wget -O ./config/global.config.json $BLOCK_CHAIN_GC_URL
+        
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        branch: main
+        add_options: '.'
+        commit_message: create-release.yml some changes applied
+      continue-on-error: true
+   
+    - name: define modes for files
+      run: |
+        
+        chmod +x ./assets/pow-miner-opencl
+        chmod +x ./assets/tonlib-opencl-cli
+        chmod +x ./assets/pow-miner-cuda        
+        chmod +x ./assets/tonlib-cuda-cli
+        chmod +x ./assets/lite-client
+        chmod +x ./config/*.sh
+        chmod +x ./*.sh
+        chmod 777 ./config/*.service
+    
+    - name: archive assets
+      run: |
+        
+        GENERAL="README.md ./config/global.config.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./config/update.config.json ./config/execution.config.json ./config/update.sh ./assets/lite-client"
+        OPENCL="./assets/pow-miner-opencl ./assets/tonlib-opencl-cli ./config/test_run_opencl.sh ./config/bench_opencl.sh"
+        CUDA="./assets/pow-miner-cuda ./assets/tonlib-cuda-cli ./config/test_run_cuda.sh ./config/bench_cuda.sh"
+        
+        mkdir pow_miner_gpu_universal_hiveos_amd64
+        mkdir pow_miner_gpu_opencl_hiveos_amd64
+        mkdir pow_miner_gpu_cuda_hiveos_amd64
+        
+        cp --parents $GENERAL $OPENCL $CUDA ./pow_miner_gpu_universal_hiveos_amd64/
+        cp --parents $GENERAL $OPENCL ./pow_miner_gpu_opencl_hiveos_amd64/
+        cp --parents $GENERAL $CUDA ./pow_miner_gpu_cuda_hiveos_amd64/
+                
+        tar -zcf pow_miner_gpu_universal_hiveos_amd64.tar.gz ./pow_miner_gpu_universal_hiveos_amd64
+        tar -zcf pow_miner_gpu_opencl_hiveos_amd64.tar.gz ./pow_miner_gpu_opencl_hiveos_amd64
+        tar -zcf pow_miner_gpu_cuda_hiveos_amd64.tar.gz ./pow_miner_gpu_cuda_hiveos_amd64
+                        
+    - name: packing
+      uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: true
+        artifacts: pow_miner_gpu_*hiveos*.tar.gz
+        token: ${{ secrets.GITHUB_TOKEN }}
