@@ -19,7 +19,6 @@ GL_CONF="$SCRIPT_DIR/config/global.config.json"
 CUDA_M="$SCRIPT_DIR/assets/tonlib-cuda-cli"
 OCL_M="$SCRIPT_DIR/assets/tonlib-opencl-cli"
 LOGS_DIR="$SCRIPT_DIR/logs" # directory for pow-miner-gpu logs
-LOG_PIPE_FMT="/dev/pow-miner-gpu-logpipe-"
 
 #-------------------------------------------------------------------------
 # kill old processes
@@ -93,9 +92,6 @@ do
   GPU_LVL="$( jq -r ".gpu_$i[4]" $EXEC_CONF )"  # logs verbosity level
 
   echo "GPU_$i:[$GPU_TYPE,$GPU_ID,$GPU_BF,$GPU_PID,$GPU_LVL]"
-
-  # eval "rm $LOG_PIPE_FMT$i"
-  # eval "mkfifo $LOG_PIPE_FMT$i && chmod +w $LOG_PIPE_FMT$i"
 
   if [[ "$TMPFS_LOGS_EN" == "yes" ]]; then 
     
@@ -184,9 +180,6 @@ do
     GPU_LVL="$( jq -r ".gpu_$i[4]" $EXEC_CONF )"  # logs verbosity level
 
     echo "GPU_$i:[$GPU_TYPE,$GPU_ID,$GPU_BF,$GPU_PID,$GPU_LVL]"
-
-    # eval "rm $LOG_PIPE_FMT$i"
-    # eval "mkfifo $LOG_PIPE_FMT$i && chmod +w $LOG_PIPE_FMT$i"
 
     if [[ "$TMPFS_LOGS_EN" == "yes" ]]; then 
       
