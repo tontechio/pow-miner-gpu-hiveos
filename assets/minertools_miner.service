@@ -1,0 +1,14 @@
+[Unit]
+Description=TON miner {{KEY}}
+PartOf=minertools.service
+After=minertools.service
+
+[Service]
+RestartSec=5
+Restart=always
+WorkingDirectory=/hive/miners/custom/minertools-{{TYPE}}-ubuntu-18.04-x86-64/
+ExecStart=/hive/miners/custom/minertools-{{TYPE}}-ubuntu-18.04-x86-64/assets/tonlib-{{TYPE}}-cli -v {{VERBOSITY}} -C /hive/miners/custom/minertools-{{TYPE}}-ubuntu-18.04-x86-64/config/global.config.json -e 'pminer start {{GIVER}} {{WALLET}} {{GPU_ID}} {{BOOST_FACTOR}} {{PLATFORM_ID}}'{{PARAMETERS}}
+
+[Install]
+WantedBy=minertools.target
+Alias=minertools-{{KEY}}.service
