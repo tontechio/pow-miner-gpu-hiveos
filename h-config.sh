@@ -11,7 +11,7 @@ fi
 
 # MINER EXECUTION CONFIG
 echo "{" > "$EXEC_CONF"
-echo "\"type\": \"{{ type }}\"," >> "$EXEC_CONF"
+echo "\"type\": \"cuda\"," >> "$EXEC_CONF"
 echo "\"wallet\": $WALLET_ADR," >> "$EXEC_CONF"
 echo ${CUSTOM_USER_CONFIG} >> "$EXEC_CONF"
 echo "}" >> "$EXEC_CONF"

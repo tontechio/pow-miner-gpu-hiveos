@@ -43,14 +43,6 @@ jobs:
           chmod +x ./assets/tonlib-cuda-cli
           chmod +x ./assets/lite-client
 
-      - name: cuda variable substitution
-        uses: jacobtomlinson/gha-find-replace@v2
-        with:
-          find: "{{ type }}"
-          replace: "cuda"
-          regex: false
-          include: "**h-config.sh"
-
       - name: prepare cuda assets
         run: |
           GENERAL="README.md ./config/global.config.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh"
@@ -62,7 +54,7 @@ jobs:
       - name: opencl variable substitution
         uses: jacobtomlinson/gha-find-replace@v2
         with:
-          find: "{{ type }}"
+          find: "cuda"
           replace: "opencl"
           regex: false
           include: "**h-config.sh"
