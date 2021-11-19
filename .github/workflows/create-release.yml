@@ -2,6 +2,9 @@ name: create-release
 
 on:
   push:
+    branches:
+      - main
+      - develop
     tags:
       - '*'
 
