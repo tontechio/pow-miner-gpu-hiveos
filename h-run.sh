@@ -15,6 +15,7 @@ LOG_MAX_LINES=1000  # maximum size of logs
 
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
+TYPE="$( jq -r ".type" $EXEC_CONF )"
 GL_CONF="$SCRIPT_DIR/config/global.config.json"
 CUDA_M="$SCRIPT_DIR/assets/tonlib-cuda-cli"
 OCL_M="$SCRIPT_DIR/assets/tonlib-opencl-cli"

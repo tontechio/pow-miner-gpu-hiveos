@@ -30,8 +30,8 @@ Coin | TON
 Wallet | YOUR TON WALLET ADDRESS
 Pool | Configure in miner
 Name | TON flight sheet
-Miner Name | minertools-cuda-hiveos-0.6-amd64<br />or <br />minertools-opencl-hiveos-0.6-amd64 | This name is __defined automatically__ when you past the __Miner Installation URL__
-Miner Installation URL | [https://github.com/tontechio/pow-miner-gpu/releases/latest/download/minertools-cuda-hiveos-0.6-amd64.tar.gz](../releases/latest/download/minertools-cuda-hiveos-0.6-amd64.tar.gz)<br />or<br />[https://github.com/tontechio/pow-miner-gpu/releases/latest/download/minertools-opencl-hiveos-0.6-amd64.tar.gz](../releases/latest/download/minertools-opencl-hiveos-0.6-amd64.tar.gz) | Depends on your GPU device CUDA/OpenCL
+Miner Name | minertools-cuda-hiveos-0.6-x86-64<br />or <br />minertools-opencl-hiveos-0.6-x86-64 | This name is __defined automatically__ when you past the __Miner Installation URL__
+Miner Installation URL | [https://github.com/tontechio/pow-miner-gpu/releases/latest/download/minertools-cuda-hiveos-0.6-x86-64.tar.gz](../releases/latest/download/minertools-cuda-hiveos-0.6-x86-64.tar.gz)<br />or<br />[https://github.com/tontechio/pow-miner-gpu/releases/latest/download/minertools-opencl-hiveos-0.6-x86-64.tar.gz](../releases/latest/download/minertools-opencl-hiveos-0.6-x86-64.tar.gz) | Depends on your GPU device CUDA/OpenCL
 Miner Hash algorithm | | No value (empty)
 Miner Wallet and worker template | %WAL% | Only wallet number for easy script mechanics
 Miner Pool URL | stratum+tcp://p2p.antpool.com:3333 | Default value, we will not use it. HiveOS forces the existence of the value in this parameter.
@@ -48,13 +48,13 @@ Miner Extra config arguments | <nobr>"miner_0": ["kf-P_TOdwcCh0AXHhBpICDMxStxHen
 ### 3. How to download and install this plugin manually
 
 * Download by link:<br />
-  [https://github.com/tontechio/pow-miner-gpu/releases/latest/download/minertools-cuda-hiveos-0.6-amd64.tar.gz](../releases/latest/download/minertools-cuda-hiveos-0.6-amd64.tar.gz)<br />
-  [https://github.com/tontechio/pow-miner-gpu/releases/latest/download/minertools-opencl-hiveos-0.6-amd64.tar.gz](../releases/latest/download/minertools-opencl-hiveos-0.6-amd64.tar.gz)
+  [https://github.com/tontechio/pow-miner-gpu/releases/latest/download/minertools-cuda-hiveos-0.6-x86-64.tar.gz](../releases/latest/download/minertools-cuda-hiveos-0.6-x86-64.tar.gz)<br />
+  [https://github.com/tontechio/pow-miner-gpu/releases/latest/download/minertools-opencl-hiveos-0.6-x86-64.tar.gz](../releases/latest/download/minertools-opencl-hiveos-0.6-x86-64.tar.gz)
 * __Copy__ downloaded archive to the system directory __/hive/miners/custom/downloads/__
 * Open in HiveOS Account terminal shell and type this commands:
 
         cd /hive/miners/custom/downloads/
-        tar -xf minertools-*-hiveos-0.6-amd64.tar.gz -C ../
+        tar -xf minertools-*-hiveos-0.6-x86-64.tar.gz -C ../
 
 * Start the flight sheet and enjoy
 
