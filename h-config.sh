@@ -12,11 +12,14 @@ if [[ -z "$WALLET_ADR" ]]; then
   exit 1
 fi
 
+NUM=$(echo "{$CUSTOM_USER_CONFIG}" | jq '[. | keys[] | select(contains("miner"))] | length')
+
 # MINER EXECUTION CONFIG
 jq -n \
---arg wallet "$WALLET_ADR" \
+--arg wallet $WALLET_ADR \
+--arg num $NUM \
 --argjson config "{$CUSTOM_USER_CONFIG}" \
-'{"type":"cuda", "wallet": $wallet, $config}' \
+'{"type":"cuda", "wallet": $wallet, "num": $num, $config}' \
 > $EXEC_CONF
 
 exit 0
