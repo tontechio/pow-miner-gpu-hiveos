@@ -8,7 +8,6 @@ EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
 echo "{" > "$EXEC_CONF"
 
 WALLET_ADR="$( cat $WALLET_CONF | grep CUSTOM_TEMPLATE | cut -d= -f2 )"
-# WALLET_ADR="${WALLET_ADR:1:-1}"
 
 if [[ -z "$WALLET_ADR" ]]; then
   exit 1
