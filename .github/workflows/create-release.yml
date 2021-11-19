@@ -48,7 +48,8 @@ jobs:
         with:
           find: "{{ type }}"
           replace: "cuda"
-          include: "./h-config.sh"
+          regex: false
+          include: "**h-config.sh"
 
       - name: prepare cuda assets
         run: |
@@ -63,7 +64,8 @@ jobs:
         with:
           find: "{{ type }}"
           replace: "opencl"
-          include: "./h-config.sh"
+          regex: false
+          include: "**h-config.sh"
 
       - name: prepare opencl assets
         run: |
