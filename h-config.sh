@@ -1,23 +1,32 @@
-#!/bin/bash 
+#!/bin/bash
 
-SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+TYPE="cuda"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
 
-# MINER EXECUTION CONFIG
+# READ ENVS FROM FILE
+set -o allexport
+source $WALLET_CONF
+set +o allexport
 
-echo "{" > "$EXEC_CONF"
-
-WALLET_ADR="$( cat $WALLET_CONF | grep CUSTOM_TEMPLATE | cut -d= -f2 )"
-# WALLET_ADR="${WALLET_ADR:1:-1}"
-
+# CHECK NOT EMPTY
+WALLET_ADR=$CUSTOM_TEMPLATE
 if [[ -z "$WALLET_ADR" ]]; then
   exit 1
 fi
 
-echo "\"wallet\": $WALLET_ADR," >> "$EXEC_CONF"
+# READ MINER KEYS
+MINER_KEYS=$(echo "{$CUSTOM_USER_CONFIG}" | jq '[. | keys[] | select(contains("miner"))]')
+MINER_NUM=$(echo "$MINER_KEYS" | jq 'length')
 
-echo ${CUSTOM_USER_CONFIG} >> "$EXEC_CONF"
-
-echo "}" >> "$EXEC_CONF"
+# MINER EXECUTION CONFIG
+jq -n \
+  --arg type "$TYPE" \
+  --arg wallet "$WALLET_ADR" \
+  --arg num "$MINER_NUM" \
+  --argjson keys "$MINER_KEYS" \
+  --argjson config "{$CUSTOM_USER_CONFIG}" \
+  '{"type":$type, "wallet":$wallet, "keys":$keys, "num":$num, $config}' \
+  >$EXEC_CONF
 
 exit 0

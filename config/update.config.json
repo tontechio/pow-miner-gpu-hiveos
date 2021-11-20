@@ -1,5 +1,0 @@
-{
-  "block_chain_global_config_url": "https://newton-blockchain.github.io/global.config.json",
-  "pow_miner_gpu_opencl_url": "https://github.com/hardman-rd/pow-miner-gpu/releases/latest/download/minertools-opencl-ubuntu-18.04-x86-64.tar.gz",
-  "pow_miner_gpu_cuda_url": "https://github.com/hardman-rd/pow-miner-gpu/releases/latest/download/minertools-cuda-ubuntu-18.04-x86-64.tar.gz"
-}
