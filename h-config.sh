@@ -33,8 +33,8 @@ jq -n \
   >$EXEC_CONF
 
 # STOP AND REMOVE SYSTEMD UNITS
-/bin/systemctl stop minertools* --all
-rm $UNITS_DIR/minertools*.service
+/bin/systemctl stop tonminer* --all
+rm $UNITS_DIR/tonminer*.service
 /bin/systemctl daemon-reload
 
 # CREATE SYSTEMD UNITS
@@ -45,11 +45,11 @@ echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
   BOOST_FACTOR=$(echo $VARS | jq -r '.[2]')
   PLATFORM_ID=$(echo $VARS | jq -r '.[3]')
   VERBOSITY=$(echo $VARS | jq -r '.[4]')
-  PARAMETERS=" -s $SCRIPT_DIR/logs/status-minertools-$KEY.json"
+  PARAMETERS=" -s $SCRIPT_DIR/logs/status-tonminer-$KEY.json"
   if [[ "$TMPFS_LOGS_ENEBLED" == "yes" ]]; then
-    PARAMETERS="$PARAMETERS -l $SCRIPT_DIR/logs/log-minertools-$KEY"
+    PARAMETERS="$PARAMETERS -l $SCRIPT_DIR/logs/log-tonminer-$KEY"
   fi
-  UNIT_FILE="$UNITS_DIR/minertools-$KEY.service"
+  UNIT_FILE="$UNITS_DIR/tonminer-$KEY.service"
   echo "$KEY: $UNIT_FILE"
   sed -e "s/{{KEY}}/$KEY/g" \
     -e "s/{{TYPE}}/$TYPE/g" \
@@ -60,7 +60,7 @@ echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
     -e "s/{{PLATFORM_ID}}/$PLATFORM_ID/g" \
     -e "s/{{VERBOSITY}}/$VERBOSITY/g" \
     -e "s~{{PARAMETERS}}~$PARAMETERS~g" \
-    "$SCRIPT_DIR/assets/minertools.service" >$UNIT_FILE
+    "$SCRIPT_DIR/assets/tonminer.service" >$UNIT_FILE
 done
 
 exit 0

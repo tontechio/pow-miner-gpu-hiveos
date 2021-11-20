@@ -42,11 +42,11 @@ jobs:
 
       - name: prepare cuda assets
         run: |
-          GENERAL="README.md ./config/global.config.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./assets/minertools.service"
+          GENERAL="README.md ./config/global.config.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./assets/tonminer.service"
           CUDA="./assets/lite-client ./assets/pow-miner-cuda ./assets/tonlib-cuda-cli"
-          mkdir minertools_cuda
-          cp --parents $GENERAL $CUDA ./minertools_cuda/
-          tar -zcf minertools_cuda-0.1.tar.gz ./minertools_cuda
+          mkdir tonminer_cuda
+          cp --parents $GENERAL $CUDA ./tonminer_cuda/
+          tar -zcf tonminer_cuda-0.1.tar.gz ./tonminer_cuda
 
       - name: opencl variable substitution
         uses: jacobtomlinson/gha-find-replace@v2
@@ -58,16 +58,16 @@ jobs:
 
       - name: prepare opencl assets
         run: |
-          GENERAL="README.md ./config/global.config.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./assets/minertools.service"
+          GENERAL="README.md ./config/global.config.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./assets/tonminer.service"
           OPENCL="./assets/lite-client ./assets/pow-miner-opencl ./assets/tonlib-opencl-cli"
-          mkdir minertools_opencl
-          cp --parents $GENERAL $OPENCL ./minertools_opencl/
-          tar -zcf minertools_opencl-0.1.tar.gz ./minertools_opencl
+          mkdir tonminer_opencl
+          cp --parents $GENERAL $OPENCL ./tonminer_opencl/
+          tar -zcf tonminer_opencl-0.1.tar.gz ./tonminer_opencl
 
       - name: packing
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: minertools_*-0.1.tar.gz
+          artifacts: tonminer_*-0.1.tar.gz
           token: ${{ secrets.GITHUB_TOKEN }}
 

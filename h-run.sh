@@ -13,7 +13,7 @@ LOGS_DIR="$SCRIPT_DIR/logs" # directory for pow-miner-gpu logs
 #-------------------------------------------------------------------------
 
 /bin/systemctl daemon-reload
-/bin/systemctl stop minertools* --all
+/bin/systemctl stop tonminer* --all
 rm -f $SCRIPT_DIR/*blkstate*
 
 #-------------------------------------------------------------------------
@@ -40,7 +40,8 @@ fi
 # START MINERS
 #-------------------------------------------------------------------------
 
-/bin/systemctl start minertools* --all
+/bin/systemctl start tonminer* --all
 
 # do not exit
+echo "TONMINER STARTED"
 sleep infinity
