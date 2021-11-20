@@ -3,8 +3,6 @@
 TYPE="cuda"
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
-UNITS_DIR="/etc/systemd/system"
-#UNITS_DIR="$SCRIPT_DIR/config"
 
 # READ ENVS FROM FILE
 set -o allexport

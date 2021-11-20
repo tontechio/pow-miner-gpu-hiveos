@@ -9,6 +9,8 @@ EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
 LOGS_DIR="$SCRIPT_DIR/logs" # directory for pow-miner-gpu logs
 MINER_KEYS=$( jq -r ".keys" $EXEC_CONF )
 TMPFS_LOGS_ENEBLED=$( jq -r ".config.tmpfs_logs_enable" $EXEC_CONF )
+UNITS_DIR="/etc/systemd/system"
+#UNITS_DIR="$SCRIPT_DIR/config"
 
 #-------------------------------------------------------------------------
 # STOP AND REMOVE SYSTEMD UNITS
