@@ -7,13 +7,14 @@
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
 LOGS_DIR="$SCRIPT_DIR/logs" # directory for pow-miner-gpu logs
+MINER_KEYS="$( jq -r ".keys" $EXEC_CONF )"
 
 #-------------------------------------------------------------------------
 # stop old processes
 #-------------------------------------------------------------------------
 
-/bin/systemctl daemon-reload
-/bin/systemctl stop tonminer* --all
+systemctl daemon-reload
+systemctl list-units -t service --full | grep tonminer | awk '{print $1}' | xargs -i systemctl stop \{\}
 rm -f $SCRIPT_DIR/*blkstate*
 
 #-------------------------------------------------------------------------
@@ -40,8 +41,11 @@ fi
 # START MINERS
 #-------------------------------------------------------------------------
 
-/bin/systemctl start tonminer* --all
+echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
+  echo "Start tonminer-$KEY.service"
+  systemctl start "tonminer-$KEY.service"
+done
 
 # do not exit
-echo "TONMINER STARTED"
+echo "ALL STARTED"
 sleep infinity

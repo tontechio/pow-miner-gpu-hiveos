@@ -33,9 +33,9 @@ jq -n \
   >$EXEC_CONF
 
 # STOP AND REMOVE SYSTEMD UNITS
-/bin/systemctl stop tonminer* --all
+systemctl list-units -t service --full | grep tonminer | awk '{print $1}' | xargs -i systemctl stop \{\}
 rm $UNITS_DIR/tonminer*.service
-/bin/systemctl daemon-reload
+systemctl daemon-reload
 
 # CREATE SYSTEMD UNITS
 echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
