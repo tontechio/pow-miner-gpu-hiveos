@@ -8,6 +8,7 @@ SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
 LOGS_DIR="$SCRIPT_DIR/logs" # directory for pow-miner-gpu logs
 MINER_KEYS=$( jq -r ".keys" $EXEC_CONF )
+TYPE=$( jq -r ".type" $EXEC_CONF )
 TMPFS_LOGS_ENEBLED=$( jq -r ".config.tmpfs_logs_enable" $EXEC_CONF )
 UNITS_DIR="/etc/systemd/system"
 #UNITS_DIR="$SCRIPT_DIR/config"
@@ -54,7 +55,7 @@ echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
   VERBOSITY=$(echo $VARS | jq -r '.[4]')
   PARAMETERS=" -s $SCRIPT_DIR/logs/status-tonminer-$KEY.json"
   if [[ "$TMPFS_LOGS_ENEBLED" == "yes" ]]; then
-    PARAMETERS="$PARAMETERS -l $SCRIPT_DIR/logs/log-tonminer-$KEY"
+    PARAMETERS+=" -l $SCRIPT_DIR/logs/log-tonminer-$KEY"
   fi
   UNIT_FILE="$UNITS_DIR/tonminer-$KEY.service"
   echo "INFO: create $UNIT_FILE"
