@@ -1,10 +1,12 @@
 [Unit]
-Description=TON miner host service
+Description=TON miner service {{KEY}}
 
 [Service]
-Type=oneshot
-ExecStart=/bin/true
-RemainAfterExit=yes
+RestartSec=3
+Restart=always
+WorkingDirectory=/hive/miners/custom/minertools-{{TYPE}}-hiveos-0.6-x86-64/
+ExecStart=/hive/miners/custom/minertools-{{TYPE}}-hiveos-0.6-x86-64/assets/tonlib-{{TYPE}}-cli -v {{VERBOSITY}} -C /hive/miners/custom/minertools-{{TYPE}}-hiveos-0.6-x86-64/config/global.config.json -e 'pminer start {{GIVER}} {{WALLET}} {{GPU_ID}} {{BOOST_FACTOR}} {{PLATFORM_ID}}'{{PARAMETERS}}
 
 [Install]
 WantedBy=multi-user.target
+Alias=minertools-{{KEY}}.service

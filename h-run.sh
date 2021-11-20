@@ -13,7 +13,7 @@ LOGS_DIR="$SCRIPT_DIR/logs" # directory for pow-miner-gpu logs
 #-------------------------------------------------------------------------
 
 /bin/systemctl daemon-reload
-/bin/systemctl stop minertools.service
+/bin/systemctl stop minertools* --all
 rm -f $SCRIPT_DIR/*blkstate*
 
 #-------------------------------------------------------------------------
@@ -40,4 +40,7 @@ fi
 # START MINERS
 #-------------------------------------------------------------------------
 
-/bin/systemctl start minertools.service
+/bin/systemctl start minertools* --all
+
+# do not exit
+sleep infinity

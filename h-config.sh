@@ -33,12 +33,11 @@ jq -n \
   >$EXEC_CONF
 
 # STOP AND REMOVE SYSTEMD UNITS
-/bin/systemctl stop minertools.service
+/bin/systemctl stop minertools* --all
 rm $UNITS_DIR/minertools*.service
 /bin/systemctl daemon-reload
 
 # CREATE SYSTEMD UNITS
-cp "$SCRIPT_DIR/assets/minertools.service" "$UNITS_DIR/minertools.service"
 echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
   VARS=$(echo "{$CUSTOM_USER_CONFIG}" | jq "with_entries(select([.key] | inside([\"$KEY\"]))) | .[]")
   GIVER=$(echo $VARS | jq -r '.[0]')
@@ -61,7 +60,7 @@ echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
     -e "s/{{PLATFORM_ID}}/$PLATFORM_ID/g" \
     -e "s/{{VERBOSITY}}/$VERBOSITY/g" \
     -e "s~{{PARAMETERS}}~$PARAMETERS~g" \
-    "$SCRIPT_DIR/assets/minertools_miner.service" >$UNIT_FILE
+    "$SCRIPT_DIR/assets/minertools.service" >$UNIT_FILE
 done
 
 exit 0
