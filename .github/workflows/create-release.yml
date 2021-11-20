@@ -42,7 +42,7 @@ jobs:
 
       - name: prepare cuda assets
         run: |
-          GENERAL="README.md ./config/global.config.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./assets/minertools.service ./assets/minertools_miner.service"
+          GENERAL="README.md ./config/global.config.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./assets/minertools.service"
           CUDA="./assets/lite-client ./assets/pow-miner-cuda ./assets/tonlib-cuda-cli"
           mkdir minertools-cuda-hiveos-0.6-x86-64
           cp --parents $GENERAL $CUDA ./minertools-cuda-hiveos-0.6-x86-64/
@@ -58,7 +58,7 @@ jobs:
 
       - name: prepare opencl assets
         run: |
-          GENERAL="README.md ./config/global.config.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./assets/minertools.service ./assets/minertools_miner.service"
+          GENERAL="README.md ./config/global.config.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./assets/minertools.service"
           OPENCL="./assets/lite-client ./assets/pow-miner-opencl ./assets/tonlib-opencl-cli"
           mkdir minertools-opencl-hiveos-0.6-x86-64
           cp --parents $GENERAL $OPENCL ./minertools-opencl-hiveos-0.6-x86-64/
