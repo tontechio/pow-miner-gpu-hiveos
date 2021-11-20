@@ -31,7 +31,7 @@ Wallet | YOUR TON WALLET ADDRESS
 Pool | Configure in miner
 Name | TON flight sheet
 Miner Name | tonminer_cuda_hiveos_0.6<br />or <br />tonminer_opencl_hiveos_0.6 | This name is __defined automatically__ when you past the __Miner Installation URL__
-Miner Installation URL | [https://github.com/tontechio/pow-miner-gpu-hiveos/releases/latest/download/tonminer-cuda-hiveos-0.6-x86-64.tar.gz](../../releases/latest/download/tonminer_cuda_hiveos_0.6.tar.gz)<br />or<br />[https://github.com/tontechio/pow-miner-gpu-hiveos/releases/latest/download/tonminer_opencl_hiveos_0.6.tar.gz](../../releases/latest/download/tonminer_opencl_hiveos_0.6.tar.gz) | Depends on your GPU device CUDA/OpenCL
+Miner Installation URL | [https://github.com/tontechio/pow-miner-gpu-hiveos/releases/latest/download/tonminer_cuda_hiveos_0.6.tar.gz](../../releases/latest/download/tonminer_cuda_hiveos_0.6.tar.gz)<br />or<br />[https://github.com/tontechio/pow-miner-gpu-hiveos/releases/latest/download/tonminer_opencl_hiveos_0.6.tar.gz](../../releases/latest/download/tonminer_opencl_hiveos_0.6.tar.gz) | Depends on your GPU device CUDA/OpenCL
 Miner Hash algorithm | | No value (empty)
 Miner Wallet and worker template | %WAL% | Only wallet number for easy script mechanics
 Miner Pool URL | stratum+tcp://p2p.antpool.com:3333 | Default value, we will not use it. HiveOS forces the existence of the value in this parameter.

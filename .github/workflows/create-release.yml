@@ -44,9 +44,9 @@ jobs:
         run: |
           GENERAL="README.md ./config/global.config.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./assets/tonminer.service"
           CUDA="./assets/lite-client ./assets/pow-miner-cuda ./assets/tonlib-cuda-cli"
-          mkdir tonminer_cuda
-          cp --parents $GENERAL $CUDA ./tonminer_cuda/
-          tar -zcf tonminer_cuda-0.1.tar.gz ./tonminer_cuda
+          mkdir tonminer_cuda_hiveos_0.6
+          cp --parents $GENERAL $CUDA ./tonminer_cuda_hiveos_0.6/
+          tar -zcf tonminer_cuda_hiveos_0.6.tar.gz ./tonminer_cuda_hiveos_0.6
 
       - name: opencl variable substitution
         uses: jacobtomlinson/gha-find-replace@v2
@@ -60,14 +60,14 @@ jobs:
         run: |
           GENERAL="README.md ./config/global.config.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./assets/tonminer.service"
           OPENCL="./assets/lite-client ./assets/pow-miner-opencl ./assets/tonlib-opencl-cli"
-          mkdir tonminer_opencl
-          cp --parents $GENERAL $OPENCL ./tonminer_opencl/
-          tar -zcf tonminer_opencl-0.1.tar.gz ./tonminer_opencl
+          mkdir tonminer_opencl_hiveos_0.6
+          cp --parents $GENERAL $OPENCL ./tonminer_opencl_hiveos_0.6/
+          tar -zcf tonminer_opencl_hiveos_0.6.tar.gz ./tonminer_opencl_hiveos_0.6
 
       - name: packing
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: tonminer_*-0.1.tar.gz
+          artifacts: tonminer_*_hiveos_0.6.tar.gz
           token: ${{ secrets.GITHUB_TOKEN }}
 
