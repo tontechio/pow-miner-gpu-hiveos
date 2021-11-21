@@ -47,7 +47,7 @@ Based on an official HiveOS guides. In case of missunderstanding, stuck, etc ple
   |:----------|:------|:--------| 
   Coin | toncoin
   Wallet | {YOUR TON WALLET ADDRESS}
-  Pool | | Configure later in miner
+  Pool | Configure in miner | 
   Name | TON flight sheet
   Miner Name | `tonminer_cuda_hiveos_x86_64` or `tonminer_opencl_hiveos_x86_64` | Generated automatically based on *Miner Installation URL* below
   Miner Installation URL | `https://github.com/tontechio/pow-miner-gpu-hiveos/releases/latest/download/tonminer_cuda_hiveos_x86_64.tar.gz` or `https://github.com/tontechio/pow-miner-gpu-hiveos/releases/latest/download/tonminer_opencl_hiveos_x86_64.tar.gz` | Depends on your GPU device. Choose *cuda* version for Nvidia GPU and *opencl* version for AMD GPU
@@ -57,7 +57,7 @@ Based on an official HiveOS guides. In case of missunderstanding, stuck, etc ple
   Miner Extra config arguments | | *see below*
   >  Miner Extra config arguments
   > ```
-  > "miner_0": ["kf-P_TOdwcCh0AXHhBpICDMxStxHenWdLCDLNH5QcNpwMHJ8",0,32,0,2],</code>
+  > "miner_0": ["kf-P_TOdwcCh0AXHhBpICDMxStxHenWdLCDLNH5QcNpwMHJ8",0,32,0,2],
   > "miner_1": ["kf-P_TOdwcCh0AXHhBpICDMxStxHenWdLCDLNH5QcNpwMHJ8",1,32,0,2],
   > "miner_2": ["kf-P_TOdwcCh0AXHhBpICDMxStxHenWdLCDLNH5QcNpwMHJ8",2,32,0,2],
   > "miner_3": ["kf-P_TOdwcCh0AXHhBpICDMxStxHenWdLCDLNH5QcNpwMHJ8",3,32,0,2],
