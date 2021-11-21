@@ -2,7 +2,7 @@
 
 TYPE="cuda"
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
+EXEC_CONF="$SCRIPT_DIR/config/execution.config.json" # created on github build release
 
 # READ ENVS FROM FILE
 set -o allexport

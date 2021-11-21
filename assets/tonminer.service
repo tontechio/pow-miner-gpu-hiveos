@@ -4,8 +4,8 @@ Description=TON miner service {{KEY}}
 [Service]
 RestartSec=3
 Restart=always
-WorkingDirectory=/hive/miners/custom/tonminer_{{TYPE}}_hiveos_0.6/
-ExecStart=/hive/miners/custom/tonminer_{{TYPE}}_hiveos_0.6/assets/tonlib-{{TYPE}}-cli -v {{VERBOSITY}} -C /hive/miners/custom/tonminer_{{TYPE}}_hiveos_0.6/config/global.config.json -e 'pminer start {{GIVER}} {{WALLET}} {{GPU_ID}} {{BOOST_FACTOR}} {{PLATFORM_ID}}'{{PARAMETERS}}
+WorkingDirectory=/hive/miners/custom/tonminer_{{TYPE}}_hiveos_x86_64/
+ExecStart=/hive/miners/custom/tonminer_{{TYPE}}_hiveos_x86_64/assets/tonlib-{{TYPE}}-cli -v {{VERBOSITY}} -C /hive/miners/custom/tonminer_{{TYPE}}_hiveos_x86_64/config/global.config.json -e 'pminer start {{GIVER}} {{WALLET}} {{GPU_ID}} {{BOOST_FACTOR}} {{PLATFORM_ID}}'{{PARAMETERS}}
 
 [Install]
 WantedBy=multi-user.target

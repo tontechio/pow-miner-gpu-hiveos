@@ -6,7 +6,7 @@
 
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
-LOGS_DIR="$SCRIPT_DIR/logs" # directory for pow-miner-gpu logs
+LOGS_DIR="$SCRIPT_DIR/logs" # directory for miner logs
 MINER_KEYS=$( jq -r ".keys" $EXEC_CONF )
 TYPE=$( jq -r ".type" $EXEC_CONF )
 TMPFS_LOGS_ENEBLED=$( jq -r ".config.tmpfs_logs_enable" $EXEC_CONF )
