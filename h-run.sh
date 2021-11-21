@@ -9,6 +9,7 @@ EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
 LOGS_DIR="$SCRIPT_DIR/logs" # directory for miner logs
 MINER_KEYS=$( jq -r ".keys" $EXEC_CONF )
 TYPE=$( jq -r ".type" $EXEC_CONF )
+WALLET_ADR=$( jq -r ".wallet" $EXEC_CONF )
 TMPFS_LOGS_ENEBLED=$( jq -r ".config.tmpfs_logs_enable" $EXEC_CONF )
 UNITS_DIR="/etc/systemd/system"
 #UNITS_DIR="$SCRIPT_DIR/config"
@@ -82,4 +83,11 @@ done
 
 # do not exit
 echo "INFO: ALL STARTED"
-sleep infinity
+
+while true
+do
+  sleep 5.0
+  echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
+    cat $SCRIPT_DIR/logs/status-tonminer-$KEY.json
+  done
+done
