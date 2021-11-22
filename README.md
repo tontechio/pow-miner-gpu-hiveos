@@ -7,7 +7,7 @@ NB: this is an early version of HiveOS custom miner, so don't hesitate to report
 ## Limitations
 
 - HiveOS auto-update not supported
-- HiveOS detailed stats not supported
+- ~~HiveOS detailed stats not supported~~ supported for CUDA
 
 ## 1. Setup HiveOS
 
