@@ -12,6 +12,8 @@ TYPE=$(jq -r ".type" $EXEC_CONF)
 WALLET_ADR=$(jq -r ".wallet" $EXEC_CONF)
 TMPFS_LOGS_ENEBLED=$(jq -r ".config.tmpfs_logs_enable" $EXEC_CONF)
 UNITS_DIR="/etc/systemd/system"
+
+#debug
 #UNITS_DIR="$SCRIPT_DIR/config"
 
 #-------------------------------------------------------------------------
@@ -85,7 +87,7 @@ echo "INFO: ALL STARTED"
 
 while true; do
   sleep 5.0
-  echo "===[ "$(date +"%D %T")" ]==========================="
+  echo "===[ "$(date +"%D %T")" ]===[ $TYPE ]========================"
   echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
     STATUS=$(systemctl show -p SubState --value tonminer-$KEY.service)
     STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$KEY.json"
@@ -103,7 +105,8 @@ while true; do
       STATUS_STATE+="ERROR: file not exists $STATUS_FILE"
     fi
     echo "[$KEY] status=$STATUS, $STATUS_STATE"
-    # force rotate logs
-    ps aux | grep -i [t]onlib- | awk '{print $2}' | xargs sudo kill -1
   done
+
+  # force rotate logs
+  ps aux | grep -i [t]onlib- | awk '{print $2}' | xargs -r sudo kill -1
 done
