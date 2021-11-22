@@ -4,14 +4,16 @@
 # ENVIRONMENT (DETERMINED BY SCRIPT)
 #-------------------------------------------------------------------------
 
-SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
 LOGS_DIR="$SCRIPT_DIR/logs" # directory for miner logs
-MINER_KEYS=$( jq -r ".keys" $EXEC_CONF )
-TYPE=$( jq -r ".type" $EXEC_CONF )
-WALLET_ADR=$( jq -r ".wallet" $EXEC_CONF )
-TMPFS_LOGS_ENEBLED=$( jq -r ".config.tmpfs_logs_enable" $EXEC_CONF )
+MINER_KEYS=$(jq -r ".keys" $EXEC_CONF)
+TYPE=$(jq -r ".type" $EXEC_CONF)
+WALLET_ADR=$(jq -r ".wallet" $EXEC_CONF)
+TMPFS_LOGS_ENEBLED=$(jq -r ".config.tmpfs_logs_enable" $EXEC_CONF)
 UNITS_DIR="/etc/systemd/system"
+
+#debug
 #UNITS_DIR="$SCRIPT_DIR/config"
 
 #-------------------------------------------------------------------------
@@ -28,12 +30,11 @@ rm -f $SCRIPT_DIR/*blkstate*
 # 2. CHECK THE THAT DIRECTORY IS A TMPFS MOUNT POINT
 #-------------------------------------------------------------------------
 
-if [ ! -d $LOGS_DIR ]
-then
+if [ ! -d $LOGS_DIR ]; then
   mkdir $LOGS_DIR
 fi
 
-LOGS_DIR_MNT_CHECK="$( mount | grep $LOGS_DIR )"
+LOGS_DIR_MNT_CHECK="$(mount | grep $LOGS_DIR)"
 
 echo "INFO:LOGS_DIR_MNT_CHECK=$LOGS_DIR_MNT_CHECK"
 
@@ -84,10 +85,28 @@ done
 # do not exit
 echo "INFO: ALL STARTED"
 
-while true
-do
+while true; do
   sleep 5.0
+  echo "===[ "$(date +"%D %T")" ]===[ $TYPE ]========================"
   echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
-    cat $SCRIPT_DIR/logs/status-tonminer-$KEY.json
+    STATUS=$(systemctl show -p SubState --value tonminer-$KEY.service)
+    STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$KEY.json"
+    STATUS_STATE=""
+    if test -f "$STATUS_FILE"; then
+      STATUS_GIVER=$(jq -r ".giver" $STATUS_FILE)
+      STATUS_SEED=$(jq -r ".seed" $STATUS_FILE)
+      STATUS_COMPLEXITY=$(jq -r ".complexity" $STATUS_FILE)
+      STATUS_PASSED=$(jq -r ".passed" $STATUS_FILE)
+      STATUS_HASHES_COMPUTED=$(jq -r ".hashes_computed" $STATUS_FILE)
+      STATUS_SPEED=$(jq -r ".speed" $STATUS_FILE)
+      STATUS_INSTANT_SPEED=$(jq -r ".instant_speed" $STATUS_FILE)
+      STATUS_STATE="giver=$STATUS_GIVER, seed=${STATUS_SEED:0:4}...${STATUS_SEED: -4}, passed: $STATUS_PASSED, hashes computed: $STATUS_HASHES_COMPUTED, speed: $STATUS_INSTANT_SPEED Mhash/s, avg speed: $STATUS_SPEED Mhash/s"
+    else
+      STATUS_STATE+="ERROR: file not exists $STATUS_FILE"
+    fi
+    echo "[$KEY] status=$STATUS, $STATUS_STATE"
   done
+
+  # force rotate logs
+  ps aux | grep -i [t]onlib- | awk '{print $2}' | xargs -r sudo kill -1
 done
