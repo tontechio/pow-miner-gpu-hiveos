@@ -49,7 +49,7 @@ fi
 #-------------------------------------------------------------------------
 
 echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
-  VARS=$(jq ".config | with_entries(select([.key] | inside([\"$KEY\"]))) | .[]" $EXEC_CONF)
+  VARS=$(jq ".config | with_entries(select(.key==\"$KEY\")) | .[]" $EXEC_CONF)
   GIVER=$(echo $VARS | jq -r '.[0]')
   GPU_ID=$(echo $VARS | jq -r '.[1]')
   BOOST_FACTOR=$(echo $VARS | jq -r '.[2]')

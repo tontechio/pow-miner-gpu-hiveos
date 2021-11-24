@@ -47,41 +47,49 @@ done
 # READ MINER STAT
 #-------------------------------------------------------------------------
 
-STATUS_UPTIME=0
 STATUS_HS=()
 STATUS_TEMP=()
 STATUS_FAN=()
 STATUS_BUS_NUMBERS=()
-khs=0
 
+for (( i=0; i < ${#indexes[@]}; i++)); do
+    #echo "GPU ID $i ${busids[${indexes[$i]}]}"
+    BUS_NUMER_HEX=$(echo ${busids[${indexes[$i]}]:0:2} | tr "a-z" "A-Z")
+    BUS_NUMBER=$(echo "obase=10; ibase=16; $BUS_NUMER_HEX" | bc)
+
+    STATUS_BUS_NUMBERS+=($BUS_NUMBER)
+    STATUS_TEMP+=(${temps[${indexes[$i]}]})
+    STATUS_FAN+=(${fans[${indexes[$i]}]})
+
+    # hashrate for cuda only, search record by gpu_id (todo: busid)
+    if [[ "$TYPE" == "cuda" ]]; then
+      KEYVARS=$(jq ".config | with_entries(select([.key] | contains([\"miner_\"]))) | with_entries(select(.value[1]==$i))" $EXEC_CONF)
+      KEY=$(echo $KEYVARS | jq -r 'keys[0]')
+      STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$KEY.json"
+      if test -f "$STATUS_FILE"; then
+        STATUS_INSTANT_SPEED=$(jq -r ".instant_speed" $STATUS_FILE)
+        STATUS_HS+=($STATUS_INSTANT_SPEED)
+      fi
+    else
+      STATUS_HS+=(0)
+    fi
+done
+
+# calc total hashrate and uptime
+khs=0
+STATUS_UPTIME=0
 KEYS=($((echo $MINER_KEYS | jq -c -r '.[] | @sh') | tr -d \'))
 for (( i=0; i < ${#KEYS[@]}; i++)); do
   KEY=${KEYS[$i]}
   STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$KEY.json"
-
   if test -f "$STATUS_FILE"; then
-    STATUS_TIMESTAMP=$(jq -r ".timestamp" $STATUS_FILE)
     STATUS_PASSED=$(jq -r ".passed" $STATUS_FILE)
-    STATUS_INSTANT_SPEED=$(jq -r ".instant_speed" $STATUS_FILE)
     if [[ $STATUS_UPTIME < $STATUS_PASSED ]]; then
       STATUS_UPTIME=$STATUS_PASSED
     fi
-
-    VARS=$(jq ".config | with_entries(select([.key] | inside([\"$KEY\"]))) | .[]" $EXEC_CONF)
-    GPU_ID=$(echo $VARS | jq -r '.[1]')
-
-    STATUS_BUS_NUMBERS+=($GPU_ID)
-    STATUS_HS+=($STATUS_INSTANT_SPEED)
+    STATUS_INSTANT_SPEED=$(jq -r ".instant_speed" $STATUS_FILE)
     khs=`echo $khs + $STATUS_INSTANT_SPEED | bc`
   fi
-done
-
-# cuda only, need to manage busid
-for (( i=0; i < ${#STATUS_BUS_NUMBERS[@]}; i++)); do
-    if [[ "$TYPE" == "cuda" ]]; then
-      STATUS_TEMP+=(${temps[${indexes[${STATUS_BUS_NUMBERS[$i]}]}]})
-      STATUS_FAN+=(${fans[${indexes[${STATUS_BUS_NUMBERS[$i]}]}]})
-    fi
 done
 
 #-------------------------------------------------------------------------
@@ -94,7 +102,7 @@ temp=$(echo "${STATUS_TEMP[@]}" | jq -s '.')
 fan=$(echo "${STATUS_FAN[@]}" | jq -s '.')
 bus_numbers=$(echo "${STATUS_BUS_NUMBERS[@]}" | jq -s '.')
 
-echo $hs $temp $fan $bus_numbers
+#echo $hs $temp $fan $bus_numbers
 stats=$(
   jq -n \
     --argjson hs "$hs" \
@@ -107,3 +115,7 @@ stats=$(
 
 [[ -z $khs ]] && khs=0
 [[ -z $stats ]] && stats="null"
+
+# debug
+#echo $stats
+#echo $khs
