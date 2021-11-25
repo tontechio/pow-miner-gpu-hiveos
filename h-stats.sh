@@ -62,7 +62,7 @@ for (( i=0; i < ${#indexes[@]}; i++)); do
     STATUS_FAN+=(${fans[${indexes[$i]}]})
 
     # hashrate for cuda only, search record by gpu_id (todo: busid)
-    if [[ "$TYPE" == "cuda" ]]; then
+#    if [[ "$TYPE" == "cuda" ]]; then
       KEYVARS=$(jq ".config | with_entries(select([.key] | contains([\"miner_\"]))) | with_entries(select(.value[1]==$i))" $EXEC_CONF)
       KEY=$(echo $KEYVARS | jq -r 'keys[0]')
       STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$KEY.json"
@@ -70,9 +70,9 @@ for (( i=0; i < ${#indexes[@]}; i++)); do
         STATUS_INSTANT_SPEED=$(jq -r ".instant_speed" $STATUS_FILE)
         STATUS_HS+=($STATUS_INSTANT_SPEED)
       fi
-    else
-      STATUS_HS+=(0)
-    fi
+#    else
+#      STATUS_HS+=(0)
+#    fi
 done
 
 # calc total hashrate and uptime
