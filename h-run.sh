@@ -20,8 +20,12 @@ UNITS_DIR="/etc/systemd/system"
 # STOP AND REMOVE SYSTEMD UNITS
 #-------------------------------------------------------------------------
 
-systemctl list-units -t service --full | grep tonminer | awk '{print $1}' | xargs -i systemctl stop \{\}
-rm $UNITS_DIR/tonminer*.service
+systemctl list-units -t service --full | grep tonminer-$TYPE | awk '{print $1}' | xargs -i systemctl stop \{\}
+rm $UNITS_DIR/tonminer-$TYPE-*.service
+# remove deprecated services
+if [ -f "$UNITS_DIR/tonminer-miner_0.service" ]; then
+  rm $UNITS_DIR/tonminer-*.service
+fi
 systemctl daemon-reload
 rm -f $SCRIPT_DIR/*blkstate*
 
@@ -59,7 +63,7 @@ echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
   if [[ "$TMPFS_LOGS_ENEBLED" == "yes" ]]; then
     PARAMETERS+=" -l $SCRIPT_DIR/logs/log-tonminer-$KEY"
   fi
-  UNIT_FILE="$UNITS_DIR/tonminer-$KEY.service"
+  UNIT_FILE="$UNITS_DIR/tonminer-$TYPE-$KEY.service"
   echo "INFO: create $UNIT_FILE"
   sed -e "s/{{KEY}}/$KEY/g" \
     -e "s/{{TYPE}}/$TYPE/g" \
@@ -78,8 +82,8 @@ done
 #-------------------------------------------------------------------------
 
 echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
-  echo "INFO: start tonminer-$KEY.service"
-  systemctl start "tonminer-$KEY.service"
+  echo "INFO: start tonminer-$TYPE-$KEY.service"
+  systemctl start "tonminer-$TYPE-$KEY.service"
 done
 
 # do not exit
@@ -108,5 +112,5 @@ while true; do
   done
 
   # force rotate logs
-  ps aux | grep -i [t]onlib- | awk '{print $2}' | xargs -r sudo kill -1
+  ps aux | grep -i [t]onlib-$TYPE | awk '{print $2}' | xargs -r sudo kill -1
 done
