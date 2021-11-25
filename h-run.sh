@@ -21,13 +21,13 @@ UNITS_DIR="/etc/systemd/system"
 #-------------------------------------------------------------------------
 
 systemctl list-units -t service --full | grep tonminer-$TYPE | awk '{print $1}' | xargs -i systemctl stop \{\}
-rm $UNITS_DIR/tonminer-$TYPE-*.service
-# remove deprecated services
+rm $UNITS_DIR/tonminer-$TYPE-*.service 2> /dev/null
+# legacy clean up
 if [ -f "$UNITS_DIR/tonminer-miner_0.service" ]; then
   rm $UNITS_DIR/tonminer-*.service
 fi
 systemctl daemon-reload
-rm -f $SCRIPT_DIR/*blkstate*
+rm -f $SCRIPT_DIR/*blkstate* 2> /dev/null
 
 #-------------------------------------------------------------------------
 # 1. CHECK THE EXISTENCE OF DIRECTORY FOR POW-MINER-LOGS
@@ -112,5 +112,5 @@ while true; do
   done
 
   # force rotate logs
-  ps aux | grep -i [t]onlib-$TYPE | awk '{print $2}' | xargs -r sudo kill -1
+  #ps aux | grep -i [t]onlib-$TYPE | awk '{print $2}' | xargs -r sudo kill -1
 done
