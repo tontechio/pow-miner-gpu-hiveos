@@ -8,6 +8,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
 MINER_KEYS=$(jq -r ".keys" $EXEC_CONF)
 TYPE=$(jq -r ".type" $EXEC_CONF)
+RELEASE_VERSION=$(jq -r ".version" $SCRIPT_DIR/config/release.json)
 
 # debug
 #GPU_STATS_JSON="$SCRIPT_DIR/config/gpu_stats.json"
@@ -62,17 +63,17 @@ for (( i=0; i < ${#indexes[@]}; i++)); do
     STATUS_FAN+=(${fans[${indexes[$i]}]})
 
     # hashrate for cuda only, search record by gpu_id (todo: busid)
-    if [[ "$TYPE" == "cuda" ]]; then
+#    if [[ "$TYPE" == "cuda" ]]; then
       KEYVARS=$(jq ".config | with_entries(select([.key] | contains([\"miner_\"]))) | with_entries(select(.value[1]==$i))" $EXEC_CONF)
       KEY=$(echo $KEYVARS | jq -r 'keys[0]')
-      STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$KEY.json"
+      STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$TYPE-$KEY.json"
       if test -f "$STATUS_FILE"; then
         STATUS_INSTANT_SPEED=$(jq -r ".instant_speed" $STATUS_FILE)
         STATUS_HS+=($STATUS_INSTANT_SPEED)
       fi
-    else
-      STATUS_HS+=(0)
-    fi
+#    else
+#      STATUS_HS+=(0)
+#    fi
 done
 
 # calc total hashrate and uptime
@@ -81,7 +82,7 @@ STATUS_UPTIME=0
 KEYS=($((echo $MINER_KEYS | jq -c -r '.[] | @sh') | tr -d \'))
 for (( i=0; i < ${#KEYS[@]}; i++)); do
   KEY=${KEYS[$i]}
-  STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$KEY.json"
+  STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$TYPE-$KEY.json"
   if test -f "$STATUS_FILE"; then
     STATUS_PASSED=$(jq -r ".passed" $STATUS_FILE)
     if [[ $STATUS_UPTIME < $STATUS_PASSED ]]; then
@@ -109,8 +110,9 @@ stats=$(
     --argjson temp "$temp" \
     --argjson fan "$fan" \
     --arg uptime "$STATUS_UPTIME" \
+    --arg ver "$RELEASE_VERSION" \
     --argjson bus_numbers "$bus_numbers" \
-    '{"hs": $hs, "hs_units": "mhs", "temp": $temp, "fan": $fan, "uptime": $uptime, "ver": "", "bus_numbers":$bus_numbers}' <<<"$stats_raw"
+    '{"hs": $hs, "hs_units": "mhs", "temp": $temp, "fan": $fan, "uptime": $uptime, "ver": $ver, "bus_numbers":$bus_numbers}' <<<"$stats_raw"
 )
 
 [[ -z $khs ]] && khs=0
