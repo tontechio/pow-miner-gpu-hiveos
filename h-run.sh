@@ -108,7 +108,7 @@ while true; do
   sleep 5.0
   echo "===[ "$(date +"%D %T")" ]===[ $TYPE ]===[ $RELEASE_VERSION ]===[ ${TONMINER_COMMIT:0:7} ]===="
   echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
-    STATUS=$(systemctl show -p SubState --value tonminer-$KEY.service)
+    STATUS=$(systemctl show -p SubState --value tonminer-$TYPE-$KEY.service)
     STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$TYPE-$KEY.json"
     STATUS_STATE=""
     if test -f "$STATUS_FILE"; then
