@@ -87,3 +87,22 @@ jobs:
           artifacts: tonminer_*_hiveos_x86_64-*.tar.gz
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Prepare README.md
+        run: |
+          sed -e "s/{{RELEASE_VERSION}}/$RELEASE_VERSION/g" "./.github/README-TEMPLATE.md" > ./README.md
+
+      - name: Get Branch
+        run: |
+          echo ${{ github.event.base_ref }}
+          echo "BRANCH=$(echo ${{ github.event.base_ref }} | cut -d'/' -f 3)" >> $GITHUB_ENV
+
+      - name: Push README.md
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: auto-update README.md
+          file_pattern: README.md
+          branch: ${{ env.BRANCH }}
+          commit_options: '--no-verify --signoff'
+#          commit_user_name: My GitHub Actions Bot # defaults to "GitHub Actions"
+#          commit_user_email: my-github-actions-bot@example.org # defaults to "actions@github.com"
+#          commit_author: Author <actions@github.com> # defaults to author of the commit that triggered the run
