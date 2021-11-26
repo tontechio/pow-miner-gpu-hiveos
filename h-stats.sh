@@ -8,6 +8,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
 MINER_KEYS=$(jq -r ".keys" $EXEC_CONF)
 TYPE=$(jq -r ".type" $EXEC_CONF)
+RELEASE_VERSION=$(jq -r ".version" $SCRIPT_DIR/config/release.json)
 
 # debug
 #GPU_STATS_JSON="$SCRIPT_DIR/config/gpu_stats.json"
@@ -109,8 +110,9 @@ stats=$(
     --argjson temp "$temp" \
     --argjson fan "$fan" \
     --arg uptime "$STATUS_UPTIME" \
+    --arg ver "$RELEASE_VERSION" \
     --argjson bus_numbers "$bus_numbers" \
-    '{"hs": $hs, "hs_units": "mhs", "temp": $temp, "fan": $fan, "uptime": $uptime, "ver": "", "bus_numbers":$bus_numbers}' <<<"$stats_raw"
+    '{"hs": $hs, "hs_units": "mhs", "temp": $temp, "fan": $fan, "uptime": $uptime, "ver": $ver, "bus_numbers":$bus_numbers}' <<<"$stats_raw"
 )
 
 [[ -z $khs ]] && khs=0

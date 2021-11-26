@@ -9,6 +9,7 @@ EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
 LOGS_DIR="$SCRIPT_DIR/logs" # directory for miner logs
 MINER_KEYS=$(jq -r ".keys" $EXEC_CONF)
 TYPE=$(jq -r ".type" $EXEC_CONF)
+RELEASE_VERSION=$(jq -r ".version" $SCRIPT_DIR/config/release.json)
 WALLET_ADR=$(jq -r ".wallet" $EXEC_CONF)
 TMPFS_LOGS_ENEBLED=$(jq -r ".config.tmpfs_logs_enable" $EXEC_CONF)
 UNITS_DIR="/etc/systemd/system"
@@ -28,6 +29,14 @@ if [ -f "$UNITS_DIR/tonminer-miner_0.service" ]; then
 fi
 systemctl daemon-reload
 rm -f $SCRIPT_DIR/*blkstate* 2> /dev/null
+
+# handle ctrl-c (miner stop)
+trap ctrl_c INT
+
+function ctrl_c() {
+  systemctl list-units -t service --full | grep tonminer-$TYPE | awk '{print $1}' | xargs -i systemctl stop \{\}
+  rm $UNITS_DIR/tonminer-$TYPE-*.service 2> /dev/null
+}
 
 #-------------------------------------------------------------------------
 # 1. CHECK THE EXISTENCE OF DIRECTORY FOR POW-MINER-LOGS
@@ -81,17 +90,22 @@ done
 # START MINERS
 #-------------------------------------------------------------------------
 
+$SCRIPT_DIR/assets/tonlib-$TYPE-cli -V
+TONMINER_VERSION=$($SCRIPT_DIR/assets/tonlib-$TYPE-cli -V)
+#TONMINER_VERSION="tonlib-cli build information: [ Commit: e624a4b82cab7e3a85817caa39e07691bcf4235f, Date: 2021-11-19 11:40:06 +0300]"
+TONMINER_COMMIT=$(echo $TONMINER_VERSION | cut -d " " -f 6 )
+
 echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
   echo "INFO: start tonminer-$TYPE-$KEY.service"
   systemctl start "tonminer-$TYPE-$KEY.service"
 done
 
-# do not exit
 echo "INFO: ALL STARTED"
 
+# do not exit
 while true; do
   sleep 5.0
-  echo "===[ "$(date +"%D %T")" ]===[ $TYPE ]========================"
+  echo "===[ "$(date +"%D %T")" ]===[ $TYPE ]===[ $RELEASE_VERSION ]===[ ${TONMINER_COMMIT:0:7} ]===="
   echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
     STATUS=$(systemctl show -p SubState --value tonminer-$KEY.service)
     STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$KEY.json"

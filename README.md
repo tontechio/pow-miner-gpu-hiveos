@@ -50,7 +50,7 @@ Based on an official HiveOS guides. In case of missunderstanding, stuck, etc ple
   Pool | Configure in miner | 
   Name | TON flight sheet
   Miner Name | `tonminer_cuda_hiveos_x86_64` or `tonminer_opencl_hiveos_x86_64` | Generated automatically based on *Miner Installation URL* below
-  Miner Installation URL | `https://github.com/tontechio/pow-miner-gpu-hiveos/releases/latest/download/tonminer_cuda_hiveos_x86_64.tar.gz` or `https://github.com/tontechio/pow-miner-gpu-hiveos/releases/latest/download/tonminer_opencl_hiveos_x86_64.tar.gz` | Depends on your GPU device. Choose *cuda* version for Nvidia GPU and *opencl* version for AMD GPU
+  Miner Installation URL | `https://github.com/tontechio/pow-miner-gpu-hiveos/releases/latest/download/tonminer_cuda_hiveos_x86_64-v20211126.1.tar.gz` or `https://github.com/tontechio/pow-miner-gpu-hiveos/releases/latest/download/tonminer_opencl_hiveos_x86_64-v20211126.1.tar.gz` | Depends on your GPU device. Choose *cuda* version for Nvidia GPU and *opencl* version for AMD GPU
   Miner Hash algorithm | | No value (empty)
   Miner Wallet and worker template | `%WAL%` | Only wallet number for easy script mechanics
   Miner Pool URL | `stratum+tcp://p2p.antpool.com:3333` | Keep the default value, this value is not used by TON miner
@@ -82,12 +82,12 @@ Based on an official HiveOS guides. In case of missunderstanding, stuck, etc ple
 ## How to download and install this plugin manually
 
 * Download latest miner:
-  - CUDA: https://github.com/tontechio/pow-miner-gpu-hiveos/releases/latest/download/tonminer_cuda_hiveos_x86_64.tar.gz
-  - OpenCL: https://github.com/tontechio/pow-miner-gpu-hiveos/releases/latest/download/tonminer_opencl_hiveos_x86_64.tar.gz
+  - CUDA: https://github.com/tontechio/pow-miner-gpu-hiveos/releases/latest/download/tonminer_cuda_hiveos_x86_64-v20211126.1.tar.gz
+  - OpenCL: https://github.com/tontechio/pow-miner-gpu-hiveos/releases/latest/download/tonminer_opencl_hiveos_x86_64-v20211126.1.tar.gz
 * Copy downloaded archive to the system directory `/hive/miners/custom/downloads/`
 * Open HiveOS terminal shell (console) and execute commands:
   - `cd /hive/miners/custom/downloads/`
-  - `tar -xf tonminer_*_hiveos_x86_64.tar.gz -C ../`
+  - `tar -xf tonminer_*.tar.gz -C ../`
 * Start the flight sheet
 
 ## Updating miner tools and blockchain config

@@ -16,7 +16,10 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: download and extract latest miner-tools release
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Download and extract latest miner-tools release
         run: |
           PMG_OPENCL_URL="https://github.com/tontechio/pow-miner-gpu/releases/latest/download/minertools-opencl-ubuntu-18.04-x86-64.tar.gz"
           PMG_CUDA_URL="https://github.com/tontechio/pow-miner-gpu/releases/latest/download/minertools-cuda-ubuntu-18.04-x86-64.tar.gz"
@@ -27,12 +30,25 @@ jobs:
           rm -f minertools-opencl-ubuntu-18.04-x86-64.tar.gz
           rm -f minertools-cuda-ubuntu-18.04-x86-64.tar.gz
 
-      - name: download latest blockchain config
+      - name: Print minertools build version
+        run: |
+          echo "Release $RELEASE_VERSION"
+          ./assets/lite-client -V
+          ./assets/pow-miner-cuda -V
+          ./assets/tonlib-cuda-cli -V
+      #          ./assets/pow-miner-opencl -V
+      #          ./assets/tonlib-opencl-cli -V
+
+      - name: Save release version
+        run: |
+          echo "{\"version\":\"$RELEASE_VERSION\"}" > ./config/release.json
+
+      - name: Download latest blockchain config
         run: |
           BLOCK_CHAIN_GC_URL="https://newton-blockchain.github.io/global.config.json"
           wget -O ./config/global.config.json $BLOCK_CHAIN_GC_URL
 
-      - name: define modes for files
+      - name: Define modes for files
         run: |
           chmod +x ./assets/pow-miner-opencl
           chmod +x ./assets/tonlib-opencl-cli
@@ -40,15 +56,15 @@ jobs:
           chmod +x ./assets/tonlib-cuda-cli
           chmod +x ./assets/lite-client
 
-      - name: prepare cuda assets
+      - name: Prepare cuda assets
         run: |
-          GENERAL="README.md ./config/global.config.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./assets/tonminer.service"
+          GENERAL="README.md ./config/global.config.json ./config/release.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./assets/tonminer.service"
           CUDA="./assets/lite-client ./assets/pow-miner-cuda ./assets/tonlib-cuda-cli"
           mkdir tonminer_cuda_hiveos_x86_64
           cp --parents $GENERAL $CUDA ./tonminer_cuda_hiveos_x86_64/
-          tar -zcf tonminer_cuda_hiveos_x86_64.tar.gz ./tonminer_cuda_hiveos_x86_64
+          tar -zcf tonminer_cuda_hiveos_x86_64-$RELEASE_VERSION.tar.gz ./tonminer_cuda_hiveos_x86_64
 
-      - name: opencl variable substitution
+      - name: Opencl variable substitution
         uses: jacobtomlinson/gha-find-replace@v2
         with:
           find: "cuda"
@@ -56,18 +72,18 @@ jobs:
           regex: false
           include: "**h-config.sh"
 
-      - name: prepare opencl assets
+      - name: Prepare opencl assets
         run: |
-          GENERAL="README.md ./config/global.config.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./assets/tonminer.service"
+          GENERAL="README.md ./config/global.config.json ./config/release.json ./h-config.sh ./h-manifest.conf ./h-run.sh ./h-stats.sh ./assets/tonminer.service"
           OPENCL="./assets/lite-client ./assets/pow-miner-opencl ./assets/tonlib-opencl-cli"
           mkdir tonminer_opencl_hiveos_x86_64
           cp --parents $GENERAL $OPENCL ./tonminer_opencl_hiveos_x86_64/
-          tar -zcf tonminer_opencl_hiveos_x86_64.tar.gz ./tonminer_opencl_hiveos_x86_64
+          tar -zcf tonminer_opencl_hiveos_x86_64-$RELEASE_VERSION.tar.gz ./tonminer_opencl_hiveos_x86_64
 
-      - name: packing
+      - name: Packing
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: tonminer_*_hiveos_x86_64.tar.gz
+          artifacts: tonminer_*_hiveos_x86_64-*.tar.gz
           token: ${{ secrets.GITHUB_TOKEN }}
 
