@@ -66,7 +66,7 @@ for (( i=0; i < ${#indexes[@]}; i++)); do
 #    if [[ "$TYPE" == "cuda" ]]; then
       KEYVARS=$(jq ".config | with_entries(select([.key] | contains([\"miner_\"]))) | with_entries(select(.value[1]==$i))" $EXEC_CONF)
       KEY=$(echo $KEYVARS | jq -r 'keys[0]')
-      STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$KEY.json"
+      STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$TYPE-$KEY.json"
       if test -f "$STATUS_FILE"; then
         STATUS_INSTANT_SPEED=$(jq -r ".instant_speed" $STATUS_FILE)
         STATUS_HS+=($STATUS_INSTANT_SPEED)
@@ -82,7 +82,7 @@ STATUS_UPTIME=0
 KEYS=($((echo $MINER_KEYS | jq -c -r '.[] | @sh') | tr -d \'))
 for (( i=0; i < ${#KEYS[@]}; i++)); do
   KEY=${KEYS[$i]}
-  STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$KEY.json"
+  STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$TYPE-$KEY.json"
   if test -f "$STATUS_FILE"; then
     STATUS_PASSED=$(jq -r ".passed" $STATUS_FILE)
     if [[ $STATUS_UPTIME < $STATUS_PASSED ]]; then

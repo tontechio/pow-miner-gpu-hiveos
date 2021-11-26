@@ -13,6 +13,7 @@ RELEASE_VERSION=$(jq -r ".version" $SCRIPT_DIR/config/release.json)
 WALLET_ADR=$(jq -r ".wallet" $EXEC_CONF)
 TMPFS_LOGS_ENEBLED=$(jq -r ".config.tmpfs_logs_enable" $EXEC_CONF)
 UNITS_DIR="/etc/systemd/system"
+LOG_MAX_LINES=10000
 
 #debug
 #UNITS_DIR="$SCRIPT_DIR/config"
@@ -68,9 +69,9 @@ echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
   BOOST_FACTOR=$(echo $VARS | jq -r '.[2]')
   PLATFORM_ID=$(echo $VARS | jq -r '.[3]')
   VERBOSITY=$(echo $VARS | jq -r '.[4]')
-  PARAMETERS=" -s $SCRIPT_DIR/logs/status-tonminer-$KEY.json"
+  PARAMETERS=" -s $SCRIPT_DIR/logs/status-tonminer-$TYPE-$KEY.json"
   if [[ "$TMPFS_LOGS_ENEBLED" == "yes" ]]; then
-    PARAMETERS+=" -l $SCRIPT_DIR/logs/log-tonminer-$KEY"
+    PARAMETERS+=" -l $SCRIPT_DIR/logs/log-tonminer-$TYPE-$KEY"
   fi
   UNIT_FILE="$UNITS_DIR/tonminer-$TYPE-$KEY.service"
   echo "INFO: create $UNIT_FILE"
@@ -108,7 +109,7 @@ while true; do
   echo "===[ "$(date +"%D %T")" ]===[ $TYPE ]===[ $RELEASE_VERSION ]===[ ${TONMINER_COMMIT:0:7} ]===="
   echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
     STATUS=$(systemctl show -p SubState --value tonminer-$KEY.service)
-    STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$KEY.json"
+    STATUS_FILE="$SCRIPT_DIR/logs/status-tonminer-$TYPE-$KEY.json"
     STATUS_STATE=""
     if test -f "$STATUS_FILE"; then
       STATUS_GIVER=$(jq -r ".giver" $STATUS_FILE)
@@ -123,8 +124,12 @@ while true; do
       STATUS_STATE+="ERROR: file not exists $STATUS_FILE"
     fi
     echo "[$KEY] status=$STATUS, $STATUS_STATE"
-  done
 
-  # force rotate logs
-  #ps aux | grep -i [t]onlib-$TYPE | awk '{print $2}' | xargs -r sudo kill -1
+    # force rotate logs
+    LOG_LINES="$( wc -l $SCRIPT_DIR/logs/log-tonminer-$TYPE-$KEY | awk '{print $1}' )"
+    if [ "$LOG_LINES" -gt "$LOG_MAX_LINES" ]; then
+      ps aux | grep -i [t]onlib-$TYPE-$KEY | awk '{print $2}' | xargs -r kill -1
+    fi
+
+  done
 done
