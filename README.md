@@ -49,7 +49,7 @@ Based on an official HiveOS guides. In case of missunderstanding, stuck, etc ple
   Wallet | {YOUR TON WALLET ADDRESS}
   Pool | Configure in miner | 
   Name | TON flight sheet
-  Miner Name | `tonminer_cuda_hiveos_x86_64` or `tonminer_opencl_hiveos_x86_64` | Generated automatically based on *Miner Installation URL* below
+  Miner Name | `tonminer_cuda_hiveos_x86_64-h.20211130.1.tar.gz` or `tonminer_opencl_hiveos_x86_64-h.20211130.1.tar.gz` | Generated automatically based on *Miner Installation URL* below
   Miner Installation URL | `https://github.com/tontechio/pow-miner-gpu-hiveos/releases/download/h.20211130.1/tonminer_cuda_hiveos_x86_64-h.20211130.1.tar.gz` or `https://github.com/tontechio/pow-miner-gpu-hiveos/releases/download/h.20211130.1/tonminer_opencl_hiveos_x86_64-h.20211130.1.tar.gz` | Depends on your GPU device. Choose *cuda* version for Nvidia GPU and *opencl* version for AMD GPU
   Miner Hash algorithm | | No value (empty)
   Miner Wallet and worker template | `%WAL%` | Only wallet number for easy script mechanics
