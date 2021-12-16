@@ -33,6 +33,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo $EXEC_CONF_JSON | jq > $EXEC_CONF
+echo $EXEC_CONF_JSON | jq '.' > $EXEC_CONF
 
 exit 0
