@@ -6,6 +6,20 @@
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 EXEC_CONF="$SCRIPT_DIR/config/execution.config.json"
+
+# file exists
+if [ ! -f "$EXEC_CONF" ]; then
+    echo "$EXEC_CONF does not exist. Please reinstall miner."
+    exit 1
+fi
+
+# file not empty
+if [ ! -s "$EXEC_CONF" ]; then
+  echo "ERROR: wrong miner configuration!"
+  echo "Probably invalid JSON string in Extra config arguments."
+  exit 1
+fi
+
 LOGS_DIR="$SCRIPT_DIR/logs" # directory for miner logs
 MINER_KEYS=$(jq -r ".keys" $EXEC_CONF)
 TYPE=$(jq -r ".type" $EXEC_CONF)
