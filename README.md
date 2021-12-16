@@ -39,7 +39,7 @@ Based on an official HiveOS guides. In case of missunderstanding, stuck, etc ple
 ## 2. Configure TON miner
 
 * Create a "TON wallet" in HiveOS account with custom "toncoin" coin
-* *Source* for coin is optional, so you can ignore it or check the original docs (https://hiveos.farm/guides-how_to_start_mine_in_Hive_OS/)
+* *Source* for coin is optional, so you can ginore it or check the original docs (https://hiveos.farm/guides-how_to_start_mine_in_Hive_OS/)
 * Fill and double check your personal wallet address in the *Address* field
 * Now you must create HiveOS *flight sheet* for your Rig with custom Miner. Example below:
 
@@ -50,7 +50,7 @@ Based on an official HiveOS guides. In case of missunderstanding, stuck, etc ple
   Pool | Configure in miner | 
   Name | TON flight sheet
   Miner Name | `tonminer_cuda_hiveos_x86_64` or `tonminer_opencl_hiveos_x86_64` | Generated automatically based on *Miner Installation URL* below
-  Miner Installation URL | `https://github.com/tontechio/pow-miner-gpu-hiveos/releases/download/h.20211214.1/tonminer_cuda_hiveos_x86_64-h.20211214.1.tar.gz` or `https://github.com/tontechio/pow-miner-gpu-hiveos/releases/download/h.20211214.1/tonminer_opencl_hiveos_x86_64-h.20211214.1.tar.gz` | Depends on your GPU device. Choose *cuda* version for Nvidia GPU and *opencl* version for AMD GPU
+  Miner Installation URL | `https://github.com/tontechio/pow-miner-gpu-hiveos/releases/download/h.20211216.1/tonminer_cuda_hiveos_x86_64-h.20211216.1.tar.gz` or `https://github.com/tontechio/pow-miner-gpu-hiveos/releases/download/h.20211216.1/tonminer_opencl_hiveos_x86_64-h.20211216.1.tar.gz` | Depends on your GPU device. Choose *cuda* version for Nvidia GPU and *opencl* version for AMD GPU
   Miner Hash algorithm | | No value (empty)
   Miner Wallet and worker template | `%WAL%` | Only wallet number for easy script mechanics
   Miner Pool URL | `stratum+tcp://p2p.antpool.com:3333` | Keep the default value, this value is not used by TON miner
@@ -82,8 +82,8 @@ Based on an official HiveOS guides. In case of missunderstanding, stuck, etc ple
 ## How to download and install this plugin manually
 
 * Download latest miner:
-  - CUDA: https://github.com/tontechio/pow-miner-gpu-hiveos/releases/download/h.20211214.1/tonminer_cuda_hiveos_x86_64-h.20211214.1.tar.gz
-  - OpenCL: https://github.com/tontechio/pow-miner-gpu-hiveos/releases/download/h.20211214.1/tonminer_opencl_hiveos_x86_64-h.20211214.1.tar.gz
+  - CUDA: https://github.com/tontechio/pow-miner-gpu-hiveos/releases/download/h.20211216.1/tonminer_cuda_hiveos_x86_64-h.20211216.1.tar.gz
+  - OpenCL: https://github.com/tontechio/pow-miner-gpu-hiveos/releases/download/h.20211216.1/tonminer_opencl_hiveos_x86_64-h.20211216.1.tar.gz
 * Copy downloaded archive to the system directory `/hive/miners/custom/downloads/`
 * Open HiveOS terminal shell (console) and execute commands:
   - `cd /hive/miners/custom/downloads/`
