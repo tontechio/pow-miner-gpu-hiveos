@@ -11,7 +11,7 @@ MINER_KEYS=$(jq -r ".keys" $EXEC_CONF)
 TYPE=$(jq -r ".type" $EXEC_CONF)
 RELEASE_VERSION=$(jq -r ".version" $SCRIPT_DIR/config/release.json)
 WALLET_ADR=$(jq -r ".wallet" $EXEC_CONF)
-TMPFS_LOGS_ENEBLED=$(jq -r ".config.tmpfs_logs_enable" $EXEC_CONF)
+TMPFS_LOGS_ENABLED=$(jq -r ".config.tmpfs_logs_enable" $EXEC_CONF)
 UNITS_DIR="/etc/systemd/system"
 LOG_MAX_LINES=10000
 
@@ -70,8 +70,10 @@ echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
   PLATFORM_ID=$(echo $VARS | jq -r '.[3]')
   VERBOSITY=$(echo $VARS | jq -r '.[4]')
   PARAMETERS=" -s $SCRIPT_DIR/logs/status-tonminer-$TYPE-$KEY.json"
-  if [[ "$TMPFS_LOGS_ENEBLED" == "yes" ]]; then
+  if [[ "$TMPFS_LOGS_ENABLED" == "yes" ]]; then
     PARAMETERS+=" -l $SCRIPT_DIR/logs/log-tonminer-$TYPE-$KEY"
+  else
+    touch $SCRIPT_DIR/logs/log-tonminer-$TYPE-$KEY
   fi
   UNIT_FILE="$UNITS_DIR/tonminer-$TYPE-$KEY.service"
   echo "INFO: create $UNIT_FILE"
