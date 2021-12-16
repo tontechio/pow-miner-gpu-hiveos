@@ -20,13 +20,19 @@ MINER_KEYS=$(echo "{$CUSTOM_USER_CONFIG}" | jq '[. | keys[] | select(contains("m
 MINER_NUM=$(echo "$MINER_KEYS" | jq 'length')
 
 # MINER EXECUTION CONFIG
-jq -n \
+EXEC_CONF_JSON=$(jq -n \
   --arg type "$TYPE" \
   --arg wallet "$WALLET_ADR" \
   --arg num "$MINER_NUM" \
   --argjson keys "$MINER_KEYS" \
   --argjson config "{$CUSTOM_USER_CONFIG}" \
-  '{"type":$type, "wallet":$wallet, "keys":$keys, "num":$num, $config}' \
-  >$EXEC_CONF
+  '{"type":$type, "wallet":$wallet, "keys":$keys, "num":$num, $config}')
+
+if [ $? -ne 0 ]; then
+    echo "Invalid JSON string in Extra config arguments."
+    exit 1
+fi
+
+echo $EXEC_CONF_JSON | jq > $EXEC_CONF
 
 exit 0
