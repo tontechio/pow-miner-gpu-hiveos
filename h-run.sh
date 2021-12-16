@@ -72,6 +72,8 @@ echo $MINER_KEYS | jq -c -r '.[]' | while read KEY; do
   PARAMETERS=" -s $SCRIPT_DIR/logs/status-tonminer-$TYPE-$KEY.json"
   if [[ "$TMPFS_LOGS_ENEBLED" == "yes" ]]; then
     PARAMETERS+=" -l $SCRIPT_DIR/logs/log-tonminer-$TYPE-$KEY"
+  else
+    touch $SCRIPT_DIR/logs/log-tonminer-$TYPE-$KEY
   fi
   UNIT_FILE="$UNITS_DIR/tonminer-$TYPE-$KEY.service"
   echo "INFO: create $UNIT_FILE"
