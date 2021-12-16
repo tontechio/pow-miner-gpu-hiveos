@@ -39,7 +39,7 @@ Based on an official HiveOS guides. In case of missunderstanding, stuck, etc ple
 ## 2. Configure TON miner
 
 * Create a "TON wallet" in HiveOS account with custom "toncoin" coin
-* *Source* for coin is optional, so you can ginore it or check the original docs (https://hiveos.farm/guides-how_to_start_mine_in_Hive_OS/)
+* *Source* for coin is optional, so you can ignore it or check the original docs (https://hiveos.farm/guides-how_to_start_mine_in_Hive_OS/)
 * Fill and double check your personal wallet address in the *Address* field
 * Now you must create HiveOS *flight sheet* for your Rig with custom Miner. Example below:
 
